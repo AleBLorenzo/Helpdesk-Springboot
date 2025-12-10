@@ -1,11 +1,15 @@
 package com.example.demo.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 
@@ -20,7 +24,32 @@ public class Incidencia {
     private String prioridad;
     private String estado;
     private LocalDateTime fecha_creacion;
+
+    @ManyToOne
+    @JoinColumn(name = "fk_usuario") 
+    private Usuario usuario;
+
+    @OneToMany(mappedBy = "incidencia")
+    private List<Comentario> comentarios;
     
+    public long getId_incidencia() {
+        return id_incidencia;
+    }
+    public void setId_incidencia(long id_incidencia) {
+        this.id_incidencia = id_incidencia;
+    }
+    public Usuario getUsuario() {
+        return usuario;
+    }
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+    public List<Comentario> getComentarios() {
+        return comentarios;
+    }
+    public void setComentarios(List<Comentario> comentarios) {
+        this.comentarios = comentarios;
+    }
     public String getTitulo() {
         return titulo;
     }
