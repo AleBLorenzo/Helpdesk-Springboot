@@ -2,6 +2,8 @@ package com.example.demo.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,12 +21,13 @@ public class Usuario {
     private String nombre;
     private String email;
 
+    //Especifica q se realiza de uno a muchos de usuario a incidecia
     @OneToMany(mappedBy = "usuario")
+    //Le dice al Json q este es el padre para evitar buche
+    @JsonManagedReference
     private List<Incidencia> incidencias;
 
- 
-    @OneToMany(mappedBy = "usuario")
-    private List<Comentario> comentarios;
+
     
     public long getId_usuario() {
         return id_usuario;
@@ -38,12 +41,7 @@ public class Usuario {
     public void setIncidencias(List<Incidencia> incidencias) {
         this.incidencias = incidencias;
     }
-    public List<Comentario> getComentarios() {
-        return comentarios;
-    }
-    public void setComentarios(List<Comentario> comentarios) {
-        this.comentarios = comentarios;
-    }
+   
     public String getNombre() {
         return nombre;
     }

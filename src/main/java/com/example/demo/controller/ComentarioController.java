@@ -1,8 +1,14 @@
 package com.example.demo.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,19 +20,58 @@ import com.example.demo.service.ComentarioService;
 
 public class ComentarioController {
 
-       private ComentarioService comentservice;
+   private ComentarioService comentservice;
 
-    public ComentarioController(ComentarioService comentservice) {
-        this.comentservice = comentservice;
-    }
+   public ComentarioController(ComentarioService comentservice) {
+      this.comentservice = comentservice;
+   }
 
- 
+   @GetMapping
 
-     @GetMapping
+   public List<Comentario> getAllComents() {
 
-     public List<Comentario> getAllUComents(){
-        
-        return  comentservice.getAllComentarios();
-        
-     }
+      return comentservice.getAllComentarios();
+
+   }
+
+   @GetMapping("/{id}")
+
+   public Comentario getIdComents(@PathVariable Long id) {
+
+      return comentservice.getIdcomentarios(id);
+
+   }
+
+   @PostMapping
+   public Comentario postComents(@RequestBody Comentario comentario) {
+
+      return comentservice.PostInfo(comentario);
+   }
+
+   @PutMapping("/{id}")
+   public Comentario putComents(@PathVariable Long id, @RequestBody Comentario comentarioactualizado) {
+
+      Comentario comentarioexistente = comentservice.getIdcomentarios(id);
+
+      comentarioexistente.setContenido(comentarioactualizado.getContenido());
+      comentarioexistente.setIncidencia(comentarioactualizado.getIncidencia());
+      comentarioexistente.setUsuario(comentarioactualizado.getUsuario());
+      comentarioexistente.setFecha(LocalDateTime.now());
+
+      return comentservice.PostInfo(comentarioexistente);
+   }
+
+   @DeleteMapping("/{id}")
+   public String deteleComents(@PathVariable Long id) {
+
+      Comentario comentario = comentservice.getIdcomentarios(id);
+
+      if (comentario == null) {
+         return "No existe ese comentario";
+      }
+
+      comentservice.DeleteComentarios(comentario);
+
+      return "Comentario eliminado";
+   }
 }

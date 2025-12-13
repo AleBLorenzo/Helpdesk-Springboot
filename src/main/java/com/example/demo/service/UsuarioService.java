@@ -12,17 +12,32 @@ import com.example.demo.repository.UsuarioRepository;
 
 public class UsuarioService {
 
-     @Autowired
+    @Autowired
     private UsuarioRepository UserRepo;
 
     public UsuarioService(UsuarioRepository UserRepo) {
         this.UserRepo = UserRepo;
     }
-    
-    public List<Usuario> getAllUsuarios(){
+
+    public List<Usuario> getAllUsuarios() {
 
         return UserRepo.findAll();
     }
 
+    public Usuario getIdUsuarios(Long id) {
+
+        return UserRepo.findById(id).orElse(null);
+
+    }
+
+    public Usuario PostInfo(Usuario usuario) {
+
+        return UserRepo.save(usuario);
+    }
+
+    public void DeleteUser(Usuario usuario) {
+
+        UserRepo.delete(usuario);
+    }
 
 }
