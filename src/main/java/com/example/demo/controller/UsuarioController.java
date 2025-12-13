@@ -1,19 +1,31 @@
 package com.example.demo.controller;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.model.Usuario;
+import com.example.demo.service.UsuarioService;
 
 @RestController
 @RequestMapping("/api/usuario")
 
 public class UsuarioController {
 
+    private UsuarioService userservice;
 
-     @GetMapping("getall")
-    public String getMethodName(@RequestParam String param) {
-        return new String();
+    public UsuarioController(UsuarioService userservice) {
+        this.userservice = userservice;
+    }
+
+    @GetMapping
+
+    public List<Usuario> getAllUsers() {
+
+        return userservice.getAllUsuarios();
+
     }
 
 }
