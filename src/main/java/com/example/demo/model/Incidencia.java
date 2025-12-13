@@ -3,6 +3,9 @@ package com.example.demo.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,11 +28,18 @@ public class Incidencia {
     private String estado;
     private LocalDateTime fecha_creacion;
 
+    //Especifica de de incidecia a Usuario de de muchos a uno
     @ManyToOne
     @JoinColumn(name = "fk_usuario") 
+    //especifica q esta es la hija cortando asi en buche
+    //Aclarar q solo sirve para relacion uno a muchos si es muchos a mucho se utilizaria @JsonIgnore(Algo rapido si es pequeño el proyecto)
+    //Mejor si es profeciona utilizar DTOs
+    
+    @JsonBackReference
     private Usuario usuario;
 
     @OneToMany(mappedBy = "incidencia")
+    @JsonManagedReference
     private List<Comentario> comentarios;
     
     public long getId_incidencia() {
