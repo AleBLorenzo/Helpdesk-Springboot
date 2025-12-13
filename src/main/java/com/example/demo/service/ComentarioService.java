@@ -2,7 +2,6 @@ package com.example.demo.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,14 +25,19 @@ public class ComentarioService {
         return ComentRepo.findAll();
     }
 
-    public Optional<Comentario> getIdcomentarios(Long id) {
+    public Comentario getIdcomentarios(Long id) {
 
-        return ComentRepo.findById(id);
+        return ComentRepo.findById(id).orElse(null);
 
     }
 
     public Comentario PostInfo(Comentario comentario) {
         comentario.setFecha(LocalDateTime.now());
         return ComentRepo.save(comentario);
+    }
+
+    public void DeleteComentarios(Comentario comentario) {
+
+        ComentRepo.delete(comentario);
     }
 }

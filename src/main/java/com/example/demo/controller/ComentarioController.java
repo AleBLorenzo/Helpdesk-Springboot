@@ -1,11 +1,13 @@
 package com.example.demo.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,15 +36,42 @@ public class ComentarioController {
 
    @GetMapping("/{id}")
 
-   public Optional<Comentario> getIdComents(@PathVariable Long id) {
+   public Comentario getIdComents(@PathVariable Long id) {
 
       return comentservice.getIdcomentarios(id);
 
    }
 
    @PostMapping
-   public Comentario postMethodName(@RequestBody Comentario comentario) {
+   public Comentario postComents(@RequestBody Comentario comentario) {
 
       return comentservice.PostInfo(comentario);
+   }
+
+   @PutMapping("/{id}")
+   public Comentario putComents(@PathVariable Long id, @RequestBody Comentario comentarioactualizado) {
+
+      Comentario comentarioexistente = comentservice.getIdcomentarios(id);
+
+      comentarioexistente.setContenido(comentarioactualizado.getContenido());
+      comentarioexistente.setIncidencia(comentarioactualizado.getIncidencia());
+      comentarioexistente.setUsuario(comentarioactualizado.getUsuario());
+      comentarioexistente.setFecha(LocalDateTime.now());
+
+      return comentservice.PostInfo(comentarioexistente);
+   }
+
+   @DeleteMapping("/{id}")
+   public String deteleComents(@PathVariable Long id) {
+
+      Comentario comentario = comentservice.getIdcomentarios(id);
+
+      if (comentario == null) {
+         return "No existe ese comentario";
+      }
+
+      comentservice.DeleteComentarios(comentario);
+
+      return "Comentario eliminado";
    }
 }

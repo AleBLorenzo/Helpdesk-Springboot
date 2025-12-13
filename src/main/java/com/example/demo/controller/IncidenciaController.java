@@ -1,11 +1,13 @@
 package com.example.demo.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,7 +36,7 @@ public class IncidenciaController {
 
   @GetMapping("/{id}")
 
-  public Optional<Incidencia> getIdIncidents(@PathVariable Long id) {
+  public Incidencia getIdIncidents(@PathVariable Long id) {
 
     return Incidentervice.getIdIncidencias(id);
 
@@ -49,9 +51,53 @@ public class IncidenciaController {
    */
   @PostMapping
 
-  public Incidencia postMethodName(@RequestBody Incidencia nuevaIncidencia) {
+  public Incidencia postIncident(@RequestBody Incidencia nuevaIncidencia) {
 
     return Incidentervice.PostInfo(nuevaIncidencia);
+  }
+
+  /*
+   * Creamos el put lo q hace en este caso es coget una incidencia en Json q
+   * incetemos
+   * en este caso tiene q tener todo los datos sino sale como null cogemos
+   * mediante el id la existente y
+   * la modifica con los parametro s qme pasamos
+   */
+
+  @PutMapping("/{id}")
+  public Incidencia putIncident(@PathVariable Long id, @RequestBody Incidencia incidenciaactualizada) {
+
+    Incidencia incidenciaexistente = Incidentervice.getIdIncidencias(id);
+
+    incidenciaexistente.setEstado(incidenciaactualizada.getEstado());
+    incidenciaexistente.setDescripcion(incidenciaactualizada.getDescripcion());
+    incidenciaexistente.setTitulo(incidenciaactualizada.getTitulo());
+    incidenciaexistente.setPrioridad(incidenciaactualizada.getTitulo());
+    incidenciaexistente.setComentarios(incidenciaactualizada.getComentarios());
+    incidenciaexistente.setUsuario(incidenciaactualizada.getUsuario());
+    incidenciaexistente.setFecha_creacion(LocalDateTime.now());
+
+    return Incidentervice.PostInfo(incidenciaexistente);
+  }
+
+  /*
+   * Creamos la Delete q es mas sencilla coge el id q le pasemos y si existe lo
+   * elimina y de da un mensaje y
+   * si no existe te saca el mesnaje q no existe y no hace nada
+   */
+
+  @DeleteMapping("/{id}")
+  public String DeleteIncidents(@PathVariable long id) {
+
+    Incidencia incidencia = Incidentervice.getIdIncidencias(id);
+
+    if (incidencia == null) {
+      return "No existe esa incidencia";
+
+    }
+    Incidentervice.DeleteIncidencias(incidencia);
+    return "Incidencia eliminada";
+
   }
 
 }

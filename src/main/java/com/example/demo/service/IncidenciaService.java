@@ -2,7 +2,6 @@ package com.example.demo.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,9 +25,9 @@ public class IncidenciaService {
         return InciRepo.findAll();
     }
 
-    public Optional<Incidencia> getIdIncidencias(Long id) {
+    public Incidencia getIdIncidencias(Long id) {
 
-        return InciRepo.findById(id);
+        return InciRepo.findById(id).orElse(null);
 
     }
 
@@ -44,5 +43,10 @@ public class IncidenciaService {
     public Incidencia PostInfo(Incidencia incidencia) {
         incidencia.setFecha_creacion(LocalDateTime.now());
         return InciRepo.save(incidencia);
+    }
+
+    public void DeleteIncidencias(Incidencia incidencia) {
+
+        InciRepo.delete(incidencia);
     }
 }
