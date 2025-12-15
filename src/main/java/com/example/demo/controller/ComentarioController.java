@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -53,10 +52,19 @@ public class ComentarioController {
 
       Comentario comentarioexistente = comentservice.getIdcomentarios(id);
 
-      comentarioexistente.setContenido(comentarioactualizado.getContenido());
-      comentarioexistente.setIncidencia(comentarioactualizado.getIncidencia());
-      comentarioexistente.setUsuario(comentarioactualizado.getUsuario());
-      comentarioexistente.setFecha(LocalDateTime.now());
+      if (comentarioexistente == null) {
+         return null;
+      }
+
+      if (comentarioactualizado.getContenido() != null) {
+         comentarioexistente.setContenido(comentarioactualizado.getContenido());
+      }
+      if (comentarioactualizado.getIncidencia() != null) {
+         comentarioexistente.setIncidencia(comentarioactualizado.getIncidencia());
+      }
+      if (comentarioactualizado.getUsuario() != null) {
+         comentarioexistente.setUsuario(comentarioactualizado.getUsuario());
+      }
 
       return comentservice.PostInfo(comentarioexistente);
    }

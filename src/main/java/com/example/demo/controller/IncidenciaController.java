@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -69,13 +68,35 @@ public class IncidenciaController {
 
     Incidencia incidenciaexistente = Incidentervice.getIdIncidencias(id);
 
-    incidenciaexistente.setEstado(incidenciaactualizada.getEstado());
-    incidenciaexistente.setDescripcion(incidenciaactualizada.getDescripcion());
-    incidenciaexistente.setTitulo(incidenciaactualizada.getTitulo());
-    incidenciaexistente.setPrioridad(incidenciaactualizada.getTitulo());
-    incidenciaexistente.setComentarios(incidenciaactualizada.getComentarios());
-    incidenciaexistente.setUsuario(incidenciaactualizada.getUsuario());
-    incidenciaexistente.setFecha_creacion(LocalDateTime.now());
+        if (incidenciaexistente == null) {
+        return null; 
+    }
+
+    if (incidenciaactualizada.getEstado() != null) {
+      incidenciaexistente.setEstado(incidenciaactualizada.getEstado());
+    }
+
+    if (incidenciaactualizada.getDescripcion() != null) {
+      incidenciaexistente.setDescripcion(incidenciaactualizada.getDescripcion());
+    }
+
+    if (incidenciaactualizada.getTitulo() != null) {
+
+      incidenciaexistente.setTitulo(incidenciaactualizada.getTitulo());
+    }
+
+    if (incidenciaactualizada.getComentarios() != null) {
+      incidenciaexistente.setComentarios(incidenciaactualizada.getComentarios());
+    }
+
+    if (incidenciaactualizada.getPrioridad() != null) {
+      incidenciaexistente.setPrioridad(incidenciaactualizada.getPrioridad());
+    }
+
+    if (incidenciaactualizada.getUsuario() != null) {
+      incidenciaexistente.setUsuario(incidenciaactualizada.getUsuario());
+    }
+
 
     return Incidentervice.PostInfo(incidenciaexistente);
   }

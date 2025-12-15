@@ -52,10 +52,23 @@ public class UsuarioController {
 
         Usuario userexistente = userservice.getIdUsuarios(id);
 
-        userexistente.setNombre(usuarioactualizado.getNombre());
-        userexistente.setEmail(usuarioactualizado.getEmail());
-        userexistente.setIncidencias(usuarioactualizado.getIncidencias());
+        if (userexistente == null) {
+            return null;
+        }
 
+        if (usuarioactualizado.getNombre() != null) {
+            userexistente.setNombre(usuarioactualizado.getNombre());
+        }
+
+        if (usuarioactualizado.getEmail() != null) {
+            userexistente.setEmail(usuarioactualizado.getEmail());
+        }
+
+        if (usuarioactualizado.getIncidencias() != null) {
+            userexistente.setIncidencias(usuarioactualizado.getIncidencias());
+
+        }
+        
         return userservice.PostInfo(userexistente);
     }
 
