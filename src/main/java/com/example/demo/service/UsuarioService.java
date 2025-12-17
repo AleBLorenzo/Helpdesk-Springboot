@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.model.Usuario;
 import com.example.demo.repository.UsuarioRepository;
@@ -55,7 +56,24 @@ public class UsuarioService {
 
     }
 
+    @Transactional
 
+    public Usuario PostAll(List<Usuario> usuarios) {
+
+        for (int i = 0; i < usuarios.size(); i++) {
+
+            Usuario usuario = usuarios.get(i);
+
+            if (!UserRepo.existsByNombre(usuario.getNombre())) {
+
+                return UserRepo.save(usuario);
+            }
+
+        }
+
+        return null;
+
+    }
 
     public void DeleteUser(Usuario usuario) {
 

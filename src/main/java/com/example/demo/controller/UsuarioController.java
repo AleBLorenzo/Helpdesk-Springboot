@@ -56,6 +56,12 @@ public class UsuarioController {
     }
 
 
+    @PostMapping("/lista")
+    public Usuario postListUsers(@RequestBody List<Usuario> usuario) {
+
+        return userservice.PostAll(usuario);
+    }
+
 
     @PutMapping("/{id}")
     public Usuario PutUsers(@PathVariable Long id, @RequestBody Usuario usuarioactualizado) {
