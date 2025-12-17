@@ -30,10 +30,32 @@ public class UsuarioService {
 
     }
 
+    public List<Usuario> getfindByUsuarios(String nombre, String email) {
+
+        return UserRepo.findByNombreAndEmail(nombre, email);
+
+    }
+
     public Usuario PostInfo(Usuario usuario) {
 
-        return UserRepo.save(usuario);
+        try {
+
+            if (!UserRepo.existsByNombre(usuario.getNombre())) {
+
+                return UserRepo.save(usuario);
+            }
+
+        } catch (RuntimeException e) {
+
+            System.out.println("Ya existe");
+
+        }
+
+        return usuario;
+
     }
+
+
 
     public void DeleteUser(Usuario usuario) {
 
