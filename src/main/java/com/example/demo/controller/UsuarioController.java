@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,9 +38,17 @@ public class UsuarioController {
 
     @GetMapping("/{id}")
 
-    public Usuario getIdUsers(@PathVariable Long id) {
+    public ResponseEntity<Object> getIdUsers(@PathVariable Long id) {
 
-        return userservice.getIdUsuarios(id);
+        try {
+
+            Usuario usuario = userservice.getIdUsuarios(id);
+            return ResponseEntity.ok(usuario);
+
+        } catch (RuntimeException e) {
+
+            return ResponseEntity.notFound().build();
+        }
 
     }
 
@@ -55,50 +65,60 @@ public class UsuarioController {
         return userservice.PostInfo(usuario);
     }
 
-
     @PostMapping("/lista")
-    public Usuario postListUsers(@RequestBody List<Usuario> usuario) {
+    public ResponseEntity<List<Usuario>> postListUsers(@RequestBody List<Usuario> usuario) {
 
-        return userservice.PostAll(usuario);
+        List<Usuario> guardados = userservice.PostAll(usuario);
+        return ResponseEntity.status(HttpStatus.CREATED).body(guardados);
+
     }
 
-
     @PutMapping("/{id}")
-    public Usuario PutUsers(@PathVariable Long id, @RequestBody Usuario usuarioactualizado) {
+    public ResponseEntity<Usuario> PutUsers(@PathVariable Long id, @RequestBody Usuario usuarioactualizado) {
 
-        Usuario userexistente = userservice.getIdUsuarios(id);
+        try {
+            Usuario userexistente = userservice.getIdUsuarios(id);
 
-        if (userexistente == null) {
-            return null;
+            if (userexistente == null) {
+                return null;
+            }
+
+            if (usuarioactualizado.getNombre() != null) {
+                userexistente.setNombre(usuarioactualizado.getNombre());
+            }
+
+            if (usuarioactualizado.getEmail() != null) {
+                userexistente.setEmail(usuarioactualizado.getEmail());
+            }
+
+            if (usuarioactualizado.getIncidencias() != null) {
+                userexistente.setIncidencias(usuarioactualizado.getIncidencias());
+
+            }
+
+            Usuario actualizado = userservice.PostInfo(userexistente);
+            return ResponseEntity.ok(actualizado);
+
+        } catch (RuntimeException e) {
+
+            return ResponseEntity.notFound().build();
         }
-
-        if (usuarioactualizado.getNombre() != null) {
-            userexistente.setNombre(usuarioactualizado.getNombre());
-        }
-
-        if (usuarioactualizado.getEmail() != null) {
-            userexistente.setEmail(usuarioactualizado.getEmail());
-        }
-
-        if (usuarioactualizado.getIncidencias() != null) {
-            userexistente.setIncidencias(usuarioactualizado.getIncidencias());
-
-        }
-
-        return userservice.PostInfo(userexistente);
     }
 
     @DeleteMapping("/{id}")
-    public String DeleteUsers(@PathVariable Long id) {
+    public ResponseEntity<Object> DeleteUsers(@PathVariable Long id) {
 
-        Usuario usuario = userservice.getIdUsuarios(id);
+        try {
 
-        if (usuario == null) {
-            return "Usuario no encontrado";
+            Usuario usuario = userservice.getIdUsuarios(id);
+            userservice.DeleteUser(usuario);
+
+            return ResponseEntity.noContent().build();
+
+        } catch (RuntimeException e) {
+
+            return ResponseEntity.notFound().build();
         }
-        userservice.DeleteUser(usuario);
-        return "Usuario eliminado correctamente";
-
     }
 
 }
