@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Incidencia;
 import com.example.demo.repository.IncidenciaRepository;
 
@@ -27,7 +28,7 @@ public class IncidenciaService {
 
     public Incidencia getIdIncidencias(Long id) {
 
-        return InciRepo.findById(id).orElse(null);
+        return InciRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Incidencia no encontrado con id " + id) );
 
     }
 

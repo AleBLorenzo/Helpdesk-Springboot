@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.UsuarioRequestDTO;
+import com.example.demo.dto.UsuarioResponseDTO;
 import com.example.demo.model.Usuario;
 import com.example.demo.service.UsuarioService;
 
@@ -30,7 +32,7 @@ public class UsuarioController {
 
     @GetMapping
 
-    public List<Usuario> getAllUsers() {
+    public List<UsuarioResponseDTO> getAllUsers() {
 
         return userservice.getAllUsuarios();
 
@@ -40,85 +42,66 @@ public class UsuarioController {
 
     public ResponseEntity<Object> getIdUsers(@PathVariable Long id) {
 
-        try {
-
-            Usuario usuario = userservice.getIdUsuarios(id);
-            return ResponseEntity.ok(usuario);
-
-        } catch (RuntimeException e) {
-
-            return ResponseEntity.notFound().build();
-        }
+        UsuarioResponseDTO usuario = userservice.getIdUsuarios(id);
+        return ResponseEntity.ok(usuario);
 
     }
 
     @GetMapping("/buscar")
 
-    public List<Usuario> getByUserEmailUsers(@RequestParam String nombre, String email) {
+    public List<UsuarioResponseDTO> getByUserEmailUsers(@RequestParam String nombre, String email) {
 
         return userservice.getfindByUsuarios(nombre, email);
     }
 
     @PostMapping
-    public Usuario postUsers(@RequestBody Usuario usuario) {
+    public ResponseEntity<UsuarioRequestDTO> postUsers(@RequestBody UsuarioResponseDTO usuario) {
 
         return userservice.PostInfo(usuario);
     }
 
     @PostMapping("/lista")
-    public ResponseEntity<List<Usuario>> postListUsers(@RequestBody List<Usuario> usuario) {
+    public ResponseEntity<List<UsuarioResponseDTO>> postListUsers(@RequestBody List<Usuario> usuario) {
 
-        List<Usuario> guardados = userservice.PostAll(usuario);
+        List<UsuarioResponseDTO> guardados = userservice.PostAll(usuario);
         return ResponseEntity.status(HttpStatus.CREATED).body(guardados);
 
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> PutUsers(@PathVariable Long id, @RequestBody Usuario usuarioactualizado) {
+    public ResponseEntity<UsuarioResponseDTO> PutUsers(@PathVariable Long id, @RequestBody UsuarioRequestDTO usuarioactualizado) {
 
-        try {
-            Usuario userexistente = userservice.getIdUsuarios(id);
+        UsuarioResponseDTO userexistente = userservice.getIdUsuarios(id);
 
-            if (userexistente == null) {
-                return null;
-            }
-
-            if (usuarioactualizado.getNombre() != null) {
-                userexistente.setNombre(usuarioactualizado.getNombre());
-            }
-
-            if (usuarioactualizado.getEmail() != null) {
-                userexistente.setEmail(usuarioactualizado.getEmail());
-            }
-
-            if (usuarioactualizado.getIncidencias() != null) {
-                userexistente.setIncidencias(usuarioactualizado.getIncidencias());
-
-            }
-
-            Usuario actualizado = userservice.PostInfo(userexistente);
-            return ResponseEntity.ok(actualizado);
-
-        } catch (RuntimeException e) {
-
-            return ResponseEntity.notFound().build();
+        if (userexistente == null) {
+            return null;
         }
+
+        if (usuarioactualizado.getNombre() != null) {
+            userexistente.setNombre(usuarioactualizado.getNombre());
+        }
+
+        if (usuarioactualizado.getEmail() != null) {
+            userexistente.setEmail(usuarioactualizado.getEmail());
+        }
+
+        if (usuarioactualizado.getIncidencias() != null) {
+            userexistente.setIncidencias(usuarioactualizado.getIncidencias());
+
+        }
+
+        UsuarioResponseDTO actualizado = userservice.PostInfo(userexistente);
+        return ResponseEntity.ok(actualizado);
+
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> DeleteUsers(@PathVariable Long id) {
 
-        try {
+        userservice.DeleteUser(id);
 
-            Usuario usuario = userservice.getIdUsuarios(id);
-            userservice.DeleteUser(usuario);
+        return ResponseEntity.noContent().build();
 
-            return ResponseEntity.noContent().build();
-
-        } catch (RuntimeException e) {
-
-            return ResponseEntity.notFound().build();
-        }
     }
 
 }

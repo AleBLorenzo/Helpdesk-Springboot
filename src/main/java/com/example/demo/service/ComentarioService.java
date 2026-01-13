@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Comentario;
 import com.example.demo.repository.ComentarioRepository;
 
@@ -27,7 +28,7 @@ public class ComentarioService {
 
     public Comentario getIdcomentarios(Long id) {
 
-        return ComentRepo.findById(id).orElse(null);
+        return ComentRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Comentario no encontrado con id " + id) );
 
     }
 

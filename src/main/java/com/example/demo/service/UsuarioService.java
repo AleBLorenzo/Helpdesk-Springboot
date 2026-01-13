@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.dto.UsuarioRequestDTO;
+import com.example.demo.dto.UsuarioResponseDTO;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Usuario;
 import com.example.demo.repository.UsuarioRepository;
 
@@ -21,48 +24,70 @@ public class UsuarioService {
         this.UserRepo = UserRepo;
     }
 
-    public List<Usuario> getAllUsuarios() {
+    private Usuario toEntity(UsuarioRequestDTO dto) {
 
-        return UserRepo.findAll();
+        Usuario u = new Usuario();
+        u.setNombre(dto.getNombre());
+        u.setEmail(dto.getEmail());
+        return u;
     }
 
-    public Usuario getIdUsuarios(Long id) {
+    private UsuarioResponseDTO toResponseDTO(Usuario usuario) {
 
-        return UserRepo.findById(id).orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+        UsuarioResponseDTO dto = new UsuarioResponseDTO();
+
+        dto.setId(usuario.getId());
+        dto.setNombre(usuario.getNombre());
+        dto.setEmail(usuario.getEmail());
+        return dto;
+    }
+
+    public List<UsuarioResponseDTO> getAllUsuarios() {
+
+        return UserRepo.findAll().stream()
+                .map(this::toResponseDTO) // mapear cada entity a ResponseDTO
+                .toList();
+    }
+
+    public UsuarioResponseDTO getIdUsuarios(Long id) {
+
+        Usuario usuario = UserRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con id " + id));
+
+        return toResponseDTO(usuario);
+    }
+
+    public List<UsuarioResponseDTO> getfindByUsuarios(String nombre, String email) {
+
+        return UserRepo.findByNombreAndEmail(nombre, email)
+                .stream()
+                .map(this::toResponseDTO)
+                .toList();
 
     }
 
-    public List<Usuario> getfindByUsuarios(String nombre, String email) {
+    public UsuarioResponseDTO PostInfo(UsuarioRequestDTO usuario) {
 
-        return UserRepo.findByNombreAndEmail(nombre, email);
-
-    }
-
-    public Usuario PostInfo(Usuario usuario) {
-
-        try {
-
-            if (!UserRepo.existsByNombre(usuario.getNombre())) {
-
-                return UserRepo.save(usuario);
-            }
-
-        } catch (RuntimeException e) {
-
-            System.out.println("Ya existe");
-
+        if (UserRepo.existsByNombre(usuario.getNombre())) {
+            throw new ResourceNotFoundException("Ya existe un usuario con el nombre: " + usuario.getNombre());
         }
 
-        return usuario;
+        // Convertir RequestDTO → Entity
+        Usuario entity = toEntity(usuario);
 
+        // Guardar en base de datos
+        Usuario guardado = UserRepo.save(entity);
+
+        // Convertir Entity → ResponseDTO
+        return toResponseDTO(guardado);
     }
 
     @Transactional
-    public List<Usuario> PostAll(List<Usuario> usuarios) {
+    public List<UsuarioResponseDTO> PostAll(List<UsuarioRequestDTO> usuarios) {
 
-        List<Usuario> guardados = new ArrayList<>();
+        List<UsuarioResponseDTO> guardados = new ArrayList<>();
 
-        for (Usuario usuario : usuarios) {
+        for (UsuarioRequestDTO usuario : usuarios) {
             // Validación simple
             if (usuario.getNombre() == null || usuario.getNombre().isBlank()) {
                 throw new RuntimeException("El nombre no puede estar vacío");
@@ -78,17 +103,21 @@ public class UsuarioService {
                 throw new RuntimeException("Ya existe un usuario con el nombre: " + usuario.getNombre());
             }
 
-            Usuario guardado = UserRepo.save(usuario);
-            guardados.add(guardado);
+             Usuario entity = toEntity(usuario);
+        Usuario guardado = UserRepo.save(entity);
+
+            guardados.add(toResponseDTO(guardado));
         }
 
         return guardados;
 
     }
 
-    public void DeleteUser(Usuario usuario) {
+    public void DeleteUser(Long id) {
 
+        Usuario usuario = UserRepo.findById(id)
+
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con id " + id));
         UserRepo.delete(usuario);
     }
-
 }

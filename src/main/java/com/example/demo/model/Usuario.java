@@ -58,6 +58,11 @@ public Long getId() {
         this.email = email;
     }
 
+    public Usuario orElseThrow(Object object) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'orElseThrow'");
+    }
+
 
 
 
