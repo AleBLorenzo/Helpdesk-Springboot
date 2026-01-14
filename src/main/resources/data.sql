@@ -7,9 +7,6 @@ VALUES (2, 'María López', 'maria@example.com');
 INSERT INTO usuario (id_usuario, nombre, email)
 VALUES (3, 'Carlos Ruiz', 'carlos@example.com');
 
--- Sincronizar la secuencia de identidad después de insertar datos iniciales
-ALTER TABLE usuario ALTER COLUMN id_usuario RESTART WITH 4;
-
 
 INSERT INTO incidencia (id_incidencia, titulo, descripcion, prioridad, estado, fecha_creacion, fk_usuario)
 VALUES (1, 'No funciona el WiFi', 'El portátil no conecta a la red.', 'ALTA', 'ABIERTA', CURRENT_TIMESTAMP, 1);
