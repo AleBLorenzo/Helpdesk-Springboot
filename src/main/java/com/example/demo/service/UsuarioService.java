@@ -103,8 +103,8 @@ public class UsuarioService {
                 throw new RuntimeException("Ya existe un usuario con el nombre: " + usuario.getNombre());
             }
 
-             Usuario entity = toEntity(usuario);
-        Usuario guardado = UserRepo.save(entity);
+            Usuario entity = toEntity(usuario);
+            Usuario guardado = UserRepo.save(entity);
 
             guardados.add(toResponseDTO(guardado));
         }
