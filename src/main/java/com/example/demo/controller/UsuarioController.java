@@ -1,9 +1,11 @@
 package com.example.demo.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -45,6 +47,14 @@ public class UsuarioController {
     public Usuario postUsers(@RequestBody Usuario usuario) {
 
         return userservice.PostInfo(usuario);
+    }
+
+    @PatchMapping("/{id}")
+    public Usuario patchUser(@PathVariable Long id , @RequestBody Map<String, String> updates){
+      
+      
+        return userservice.PathUsuarios(id, updates);
+        
     }
 
     @PutMapping("/{id}")
