@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,8 +17,10 @@ public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id_usuario;
+    @Column(name = "id_usuario")
+    private Long id;
 
+    @Column(unique = true)
     private String nombre;
     private String email;
 
@@ -28,12 +31,12 @@ public class Usuario {
     private List<Incidencia> incidencias;
 
 
-    
-    public long getId_usuario() {
-        return id_usuario;
+public Long getId() {
+        return id;
     }
-    public void setId_usuario(long id_usuario) {
-        this.id_usuario = id_usuario;
+
+    public void setId(Long id) {
+        this.id = id;
     }
     public List<Incidencia> getIncidencias() {
         return incidencias;
@@ -54,5 +57,9 @@ public class Usuario {
     public void setEmail(String email) {
         this.email = email;
     }
+
+
+
+
     
 }
