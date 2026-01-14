@@ -16,43 +16,47 @@ public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id_usuario;
+    private long id;
 
     private String nombre;
     private String email;
 
-    //Especifica q se realiza de uno a muchos de usuario a incidecia
+    // Especifica q se realiza de uno a muchos de usuario a incidecia
     @OneToMany(mappedBy = "usuario")
-    //Le dice al Json q este es el padre para evitar buche
+    // Le dice al Json q este es el padre para evitar buche
     @JsonManagedReference
     private List<Incidencia> incidencias;
 
+    public long getId() {
+        return id;
+    }
 
-    
-    public long getId_usuario() {
-        return id_usuario;
+    public void setId(long id) {
+        this.id = id;
     }
-    public void setId_usuario(long id_usuario) {
-        this.id_usuario = id_usuario;
-    }
+
     public List<Incidencia> getIncidencias() {
         return incidencias;
     }
+
     public void setIncidencias(List<Incidencia> incidencias) {
         this.incidencias = incidencias;
     }
-   
+
     public String getNombre() {
         return nombre;
     }
+
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
 }

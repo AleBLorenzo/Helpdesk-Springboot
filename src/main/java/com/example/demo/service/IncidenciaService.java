@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +31,19 @@ public class IncidenciaService {
 
     }
 
+    public Long getAllIncidenciasUsuarios(Long id) {
+
+        long totalIncidencias = InciRepo.countByUsuarioId(id);
+
+        return totalIncidencias;
+    }
+
+       public List<Incidencia> getAllIncidenciasFecha(LocalDate min , LocalDate max) {
+        
+        return InciRepo.findByFechacreacionBetween(min ,max);
+    }
+
+
     /*
      * Creamos el metodo PostInfo q venga de incidecia ya q sera un objeto
      * ya q lo haremon en Json podemos antes de hacerlo establecer valores
@@ -41,7 +54,7 @@ public class IncidenciaService {
      */
 
     public Incidencia PostInfo(Incidencia incidencia) {
-        incidencia.setFecha_creacion(LocalDateTime.now());
+        incidencia.setFechacreacion(LocalDate.now());
         return InciRepo.save(incidencia);
     }
 

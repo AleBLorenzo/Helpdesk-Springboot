@@ -24,6 +24,8 @@ public class UsuarioService {
         return UserRepo.findAll();
     }
 
+
+
     public Usuario getIdUsuarios(Long id) {
 
         return UserRepo.findById(id).orElse(null);

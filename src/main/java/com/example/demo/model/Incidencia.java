@@ -1,6 +1,6 @@
 package com.example.demo.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -20,13 +20,13 @@ public class Incidencia {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id_incidencia;
+    private long id;
     
     private String titulo;
     private String descripcion;
     private String prioridad;
     private String estado;
-    private LocalDateTime fecha_creacion;
+    private LocalDate fechacreacion;
 
     //Especifica de de incidecia a Usuario de de muchos a uno
     @ManyToOne
@@ -42,11 +42,11 @@ public class Incidencia {
     @JsonManagedReference
     private List<Comentario> comentarios;
     
-    public long getId_incidencia() {
-        return id_incidencia;
+    public long getId() {
+        return id;
     }
-    public void setId_incidencia(long id_incidencia) {
-        this.id_incidencia = id_incidencia;
+    public void setId(long id) {
+        this.id = id;
     }
     public Usuario getUsuario() {
         return usuario;
@@ -84,10 +84,10 @@ public class Incidencia {
     public void setEstado(String estado) {
         this.estado = estado;
     }
-    public LocalDateTime getFecha_creacion() {
-        return fecha_creacion;
+    public LocalDate getFechacreacion() {
+        return fechacreacion;
     }
-    public void setFecha_creacion(LocalDateTime fecha_creacion) {
-        this.fecha_creacion = fecha_creacion;
+    public void setFechacreacion(LocalDate fechacreacion) {
+        this.fechacreacion = fechacreacion;
     }
 }

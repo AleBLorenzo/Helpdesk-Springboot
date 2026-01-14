@@ -6,4 +6,5 @@ import com.example.demo.model.Usuario;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
+
 }

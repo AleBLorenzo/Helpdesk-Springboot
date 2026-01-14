@@ -1,6 +1,6 @@
 package com.example.demo.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -17,11 +17,11 @@ public class Comentario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id_comentario;
+    private long id;
 
  
     private String contenido;
-    private LocalDateTime fecha;
+    private LocalDate fecha;
 
      @ManyToOne
     @JoinColumn(name = "fk_usuario")
@@ -33,11 +33,11 @@ public class Comentario {
     private Incidencia incidencia;
     
     
-       public long getId_comentario() {
-        return id_comentario;
+       public long getId() {
+        return id;
     }
-    public void setId_comentario(long id_comentario) {
-        this.id_comentario = id_comentario;
+    public void setId(long id) {
+        this.id = id;
     }
     
     public Usuario getUsuario() {
@@ -58,10 +58,10 @@ public class Comentario {
     public void setContenido(String contenido) {
         this.contenido = contenido;
     }
-    public LocalDateTime getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
-    public void setFecha(LocalDateTime fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 

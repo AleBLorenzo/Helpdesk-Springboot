@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.Incidencia;
@@ -41,6 +44,24 @@ public class IncidenciaController {
 
   }
 
+  @GetMapping("/{id}/conteo-incidencias")
+
+  public Long getAllIncidencia(@PathVariable Long id) {
+
+    return Incidentervice.getAllIncidenciasUsuarios(id);
+
+  }
+
+  @GetMapping("/buscar-por-ano")
+
+  public List<Incidencia> getAnoIncidencia(
+      @RequestParam("min") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate min,
+      @RequestParam("max") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate max) {
+
+    return Incidentervice.getAllIncidenciasFecha(min, max);
+
+  }
+
   /*
    * Creamos el POST para introducir Informacion
    * la mejor forma de hacerlo es mediante JSON
@@ -68,8 +89,8 @@ public class IncidenciaController {
 
     Incidencia incidenciaexistente = Incidentervice.getIdIncidencias(id);
 
-        if (incidenciaexistente == null) {
-        return null; 
+    if (incidenciaexistente == null) {
+      return null;
     }
 
     if (incidenciaactualizada.getEstado() != null) {
@@ -96,7 +117,6 @@ public class IncidenciaController {
     if (incidenciaactualizada.getUsuario() != null) {
       incidenciaexistente.setUsuario(incidenciaactualizada.getUsuario());
     }
-
 
     return Incidentervice.PostInfo(incidenciaexistente);
   }

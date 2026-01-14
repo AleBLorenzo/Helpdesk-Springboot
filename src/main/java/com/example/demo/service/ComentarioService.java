@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class ComentarioService {
     }
 
     public Comentario PostInfo(Comentario comentario) {
-        comentario.setFecha(LocalDateTime.now());
+        comentario.setFecha(LocalDate.now());
         return ComentRepo.save(comentario);
     }
 
